@@ -56,6 +56,5 @@ def client():
     invoker.set_on_email(CommandCreateXMLOrder(Receiver(), "Save report"))
     invoker.generate_general_order()
 
-
 if __name__ == "__main__":
     client()

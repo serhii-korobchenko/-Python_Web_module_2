@@ -30,6 +30,7 @@ def client_code(subject) -> None:
     subject.request()
 
 
+
 if __name__ == "__main__":
     proxy = Proxy(RealRequest())
     client_code(proxy)
