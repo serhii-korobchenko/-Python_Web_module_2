@@ -411,7 +411,6 @@ class Record:
         self.phone = Phone(add_book.phone)
         self.email = Email()
         self.adress = Adress()
-        #self.birthday = Birthday('28.05.1978') ####
         self.record_dict = {
             'Name': self.name.value,
             'Phone': [self.phone.value],
