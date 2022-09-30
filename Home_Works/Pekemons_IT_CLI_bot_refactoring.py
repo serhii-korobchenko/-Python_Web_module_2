@@ -140,6 +140,7 @@ import csv
 from pathlib import Path
 from pynput import keyboard
 import shutil
+from abc import abstractmethod, ABC
 
 
 # GLOBALS
@@ -492,6 +493,64 @@ def command_parser(command):  # command`s parser
         print("Number of arguments do not fit to reqirements. Please try again!")
 
     return command_id, name, phone
+
+
+class Presenter (ABC):
+    
+    @abstractmethod
+    def see_iteration():
+        pass
+
+    @abstractmethod
+    def show_all():
+        pass
+
+
+class PresenterRecords (Presenter): #######!!!!!!!!
+    
+    
+    def see_iteration(self, n):
+        try:
+            global x
+            global page
+            if len(add_book.data) - (x+1) >= 0:
+                print(f'Page #: {page}. ')
+            else:
+                print('Stop listing!')
+            record_generator = add_book.iterator()
+            for x in range(x, x+int(n)):
+                next(record_generator)
+
+        except IndexError:
+
+            print(f"Sorry, no more records! Use 'show all' command!")
+
+   
+    def show_all(self):
+        global x
+        global page
+
+        if len(add_book.data) == 0:
+            print('Data Base is empty yet. Please add someone!')
+        else:
+            print('Data Base contains next contacts:')
+
+            x = 0
+            page = 1
+
+            for key, value in add_book.data.items():
+
+                for key_in, value_in in value.record_dict.items():
+
+                    if value_in:
+                        if isinstance(value_in, list):
+                            print(
+                                f"{key_in} : {', '.join(map(str, value_in))} | ", end=" ")
+                        else:
+                            print(f"{key_in} : { value_in} | ", end=" ")
+                print('')
+    
+
 
 # Decorator
 def input_error(func):  # decorator
