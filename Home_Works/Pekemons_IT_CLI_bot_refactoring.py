@@ -67,66 +67,142 @@
 #                           - "good bye" or "close" or "exit" - bot stops work and messege "Good bye!"
 #
 #
-# Class_structure:
-#                  UserDict Class:
-#                         -user has Book of Contacts (AddressBook Class):
-# new+                             |__> required (Notes Class) - one or more
+# Updated Class_structure:
+#+---------------+
+#|      ABC      |
+#|---------------|
+#|               |
+#+---------------+
+#       .          
+#      /_\         
+#       |          
+#       |          
+#       |          
+#       |          
+#       |          
+#+----------------+
+#|   Presenter    |
+#|----------------|
+#| see_iteration  |
+#| show_all       |
+#+----------------+
+#       .                                     
+#      /_\                                    
+#       |                   [ Presenter ]     
+#       |                         .           
+#       |                        /_\          
+#       |                         |           
+#       |                         |           
+#+----------------+       +------------------+
+#| PresenterNotes |       | PresenterRecords |
+#|----------------|       |------------------|
+#| see_iteration  |       | see_iteration    |
+#| show_all       |       | show_all         |
+#+----------------+       +------------------+
+         
+         
+         
+         
+#+-------+
+#| Field |
+#|-------|
+#|       |
+#+-------+
+#   .
+#  /_\
+#   |              [ Field ]            [ Field ]          [ Field ]             [ Field ]
+#   |                  .                    .                  .                     .
+#   |                 /_\                  /_\                /_\                   /_\
+#   |                  |                    |                  |                     |
+#   |                  |                    |                  |                     |
+#+-------+       +--------------+       +----------+       +----------+       +---------------+
+#|  Name |       |    Email     |       |  Phone   |       | Birthday |       |     Adress    |
+#|-------|       |--------------|       |----------|       |----------|       |---------------|
+#| value |       | value        |       | __value  |       | __value  |       | value         |
+#+-------+       |--------------|       | value    |       | value    |       |---------------|
+#                | __init__     |       |----------|       |----------|       | __init__      |
+#                | change_email |       | __init__ |       | __init__ |       | change_adress |
+#                +--------------+       +----------+       +----------+       +---------------+
+                       
+                       
+                       
+                       
+#+---------------------+
+#|       UserDict      |
+#|---------------------|
+#|                     |
+#+---------------------+
+         #  .
+         # /_\
+#           |
+#           |
+#           |
+#           |
+#           |
+# +---------------------+
+# |     AddressBook     |
+# |---------------------|
+# | data                |  ---->  [ PresenterRecords ]
+# | note                |  ---->  [ Record ]
+# | notes_data          |
+# | phone               |
+# | presenter           |
+# | tag                 |
+# |---------------------|
+# | __init__            |
+# | add_notes           |
+# | add_record          |
+# | birthday_in_days    |
+# | del_record          |
+# | find_notes_by_tages |
+# | iterator            |
+# | sort_notes_by_tages |
+# +---------------------+
 #
-#                                 |__> records (Record Class): --> dict {Record.name.value: value}
-#                                                              --> Name object - separated atribute
-#                                                              --> Phone objects - separated atribute
-# new+                                                          --> Notes objects - separated atribute
-# new+                                                          --> Email objects - separated atribute
-# new+                                                          --> Adress objects - separated atribute
-#
-#                                          |__> fields (Field Class):
-#                                                      - required (Name Class) - only one
-#                                                      - optional (Phone Class) - one or more
-#                                                      - optional (Birthday Class) - only one
-# new+                                                  - required (Email Class) - one or more
-# new+                                                  - required (Adress Class) - only one
 #
 #
 #
-#                AdressBook methods:
+# +-----------------------+
+# |       Exception       |
+# |-----------------------|
+# |                       |
+# +-----------------------+
+#            .
+#           /_\
+#            |                             [ Exception ]                          [ Exception ]                 [ Exception ]
+#            |                                   .                                      .                             .
+#            |                                  /_\                                    /_\                           /_\
+#            |                                   |                                      |                             |
+#            |                                   |                                      |                             |
+# +-----------------------+       +--------------------------------+       +---------------------------+       +---------------+
+# | NameDoesNotExistError |       | BirthdayDoesNotMathFormatError |       | TelDoesNotMathFormatError |       | TryAgainError |
+# |-----------------------|       |--------------------------------|       |---------------------------|       |---------------|
+# | status                |       | status                         |       | status                    |       | status        |
+# +-----------------------+       +--------------------------------+       +---------------------------+       +---------------+
+#
+#
+#
+#
+# +--------------+                                  +------------------+
+# |    Notes     |                                  |      Record      |
+# |--------------|                                  |------------------|
+# | note         |  ---->  [ PresenterNotes ]       | adress           |  ---->  [ Adress ]
+# | presenter    |                                  | email            |  ---->  [ Email ]
+# | result       |                                  | name             |  ---->  [ Name ]
+# | tag          |                                  | phone            |  ---->  [ Phone ]
+# |--------------|                                  | record_dict      |
+# | __init__     |                                  |------------------|
+# | change_notes |                                  | __init__         |
+# | del_notes    |                                  | add_adress       |
+# +--------------+                                  | add_email        |
+#                                                   | add_phone        |
+#                                                   | days_to_birthday |
+#                                                   | del_phone        |
+#                                                   | edit_phone       |
+#                                                   +------------------+
 
-#                                - add_record --> add Record in self.data
-#new_func+                       - del_record <-- del_record_hand
-#                                - iterator - return --> generator by records -N records for 1 step
-# new_func+                       - find_notes_by_tages <-- find_notes_by_tages_head - looking up notes by tages (#tage#) in []
-# new_func+                       - sort_notes_by_tages <-- sort_notes_by_tages_head - sorting up notes by tages (#tage#) in []
-# new_func+                       - birthday_in_days    <-- birthday_in_days_head - display list of contacts, who have birthday in x days
-# new_func+                       - add_notes           <-- add_notes_head - add notes to record
 #
-#
-#                                           Notes methods:
-# new_func+                                         - change_notes  <-- change_notes_head - change notes in record
-# new_func+                                         - del_notes     <-- del_notes_head -    delete notes in record
-#
-#                                           Record methods:
-#                                                 - add_phone <-- addnum_func - add aditional tel number for certain contact (with regex check)
-#                                                 - del_phone <-- del_func - del tel number for certain contact
-#                                                 - edit_phone <-- change_func - change telephone number for existed contact
-#                                                 - days_to_birthday <-- nextbirth_func - show how many days left up to next birthday
-# new_func+                                        - add_email <-- add_email_head - add email to record (with regex check)
-# new_func+                                        - add_adress<-- add_adress_head - add adress to record
-#
-#
-#                                                  Phone methods:
-#                                                         - setter - check tel. num format (7777777777)
-#
-#                                                  Birthday methods:
-#                                                         - setter - check birthday format (28.05.1978)
 
-#
-#                                                  Email methods:
-# new_func+                                                - change_email <-- change_email_head - change email in record (with regex check)
-#
-#
-#                                                  Adress methods:
-# new_func (not relevant)                                  - change_adress <-- change_adress_head - change adress in record
-#
-#
 
 import os
 from ast import List
@@ -155,6 +231,7 @@ class AddressBook (UserDict):
     def __init__(self):
         UserDict.__init__(self)
         self.notes_data = {}
+        self.presenter = PresenterRecords()
         
 
 
@@ -286,8 +363,8 @@ class Phone (Field):
 
 class Notes:
 
-    # def __init__(self) -> None:
-    #     self.result = {}
+    def __init__(self):
+        self.presenter = PresenterNotes()
 
     def change_notes(self, name, phone):  # name=tag phone=note
         self.tag = name
@@ -343,6 +420,8 @@ class Notes:
                     writer.writerow({'tag': k, 'note': v})
             counter += 1
         print(f'Note with tag {self.tag} deleted')
+
+
 ##########################################################
 
 
@@ -466,6 +545,76 @@ class NameDoesNotExistError(Exception):
 class TryAgainError(Exception):
     status = 0
 
+
+class Presenter(ABC):
+
+    @abstractmethod
+    def see_iteration():
+        pass
+
+    @abstractmethod
+    def show_all():
+        pass
+
+
+class PresenterRecords(Presenter): 
+
+    def see_iteration(self, n):
+        try:
+            global x
+            global page
+
+            if len(add_book.data) - (x + 1) >= 0:
+                print(f'Page #: {page}. ')
+            else:
+                print('Stop listing!')
+            record_generator = add_book.iterator()
+            for x in range(x, x + int(n)):
+                next(record_generator)
+
+        except IndexError:
+
+            print(f"Sorry, no more records! Use 'show all' command!")
+
+    def show_all(self):
+        global x
+        global page
+
+        if len(add_book.data) == 0:
+            print('Data Base is empty yet. Please add someone!')
+        else:
+            print('Data Base contains next contacts:')
+
+            x = 0
+            page = 1
+
+            for key, value in add_book.data.items():
+
+                for key_in, value_in in value.record_dict.items():
+
+                    if value_in:
+                        if isinstance(value_in, list):
+                            print(
+                                f"{key_in} : {', '.join(map(str, value_in))} | ", end=" ")
+                        else:
+                            print(f"{key_in} : {value_in} | ", end=" ")
+                print('')
+
+
+class PresenterNotes(Presenter):
+
+    def see_iteration(self, n):
+        pass
+
+    def show_all(self):
+        print('')
+        print('EXISTED NOTES:')
+        for key, value in add_book.notes_data.items():
+            print(f"Tag: {key} | Note: {value}  ")
+
+            print('')
+
+
 def command_parser(command):  # command`s parser
     command_id = ''
     name = ''
@@ -494,62 +643,6 @@ def command_parser(command):  # command`s parser
 
     return command_id, name, phone
 
-
-class Presenter (ABC):
-    
-    @abstractmethod
-    def see_iteration():
-        pass
-
-    @abstractmethod
-    def show_all():
-        pass
-
-
-class PresenterRecords (Presenter): #######!!!!!!!!
-    
-    
-    def see_iteration(self, n):
-        try:
-            global x
-            global page
-            if len(add_book.data) - (x+1) >= 0:
-                print(f'Page #: {page}. ')
-            else:
-                print('Stop listing!')
-            record_generator = add_book.iterator()
-            for x in range(x, x+int(n)):
-                next(record_generator)
-
-        except IndexError:
-
-            print(f"Sorry, no more records! Use 'show all' command!")
-
-   
-    def show_all(self):
-        global x
-        global page
-
-        if len(add_book.data) == 0:
-            print('Data Base is empty yet. Please add someone!')
-        else:
-            print('Data Base contains next contacts:')
-
-            x = 0
-            page = 1
-
-            for key, value in add_book.data.items():
-
-                for key_in, value_in in value.record_dict.items():
-
-                    if value_in:
-                        if isinstance(value_in, list):
-                            print(
-                                f"{key_in} : {', '.join(map(str, value_in))} | ", end=" ")
-                        else:
-                            print(f"{key_in} : { value_in} | ", end=" ")
-                print('')
-    
 
 
 # Decorator
@@ -642,55 +735,19 @@ def phone_func(name):  # 1&2
         NameDoesNotExistError.status = 1
 
 def show_func():
-    global x
-    global page
 
-    if len(add_book.data) == 0:
-        print('Data Base is empty yet. Please add someone!')
-    else:
-        print('Data Base contains next contacts:')
-
-        x = 0
-        page = 1
-
-        for key, value in add_book.data.items():
-
-            for key_in, value_in in value.record_dict.items():
-
-                if value_in:
-                    if isinstance(value_in, list):
-                        print(
-                            f"{key_in} : {', '.join(map(str, value_in))} | ", end=" ")
-                    else:
-                        print(f"{key_in} : { value_in} | ", end=" ")
-            print('')
-
-### Notes show
-    print('')
-    print('EXISTED NOTES:')
-    for key, value in add_book.notes_data.items():
-
-        print(f"Tag: {key} | Note: { value}  ")
-    
-        print('')
+    add_book.presenter.show_all()
+    Notes().presenter.show_all()
 
 @input_error
 def see_func(n):
 
-    try:
-        global x
-        global page
-        if len(add_book.data) - (x+1) >= 0:
-            print(f'Page #: {page}. ')
-        else:
-            print('Stop listing!')
-        record_generator = add_book.iterator()
-        for x in range(x, x+int(n)):
-            next(record_generator)
 
-    except IndexError:
+    add_book.presenter.see_iteration(n)
 
-        print(f"Sorry, no more records! Use 'show all' command!")
+
+
+
 
 @input_error
 def addnum_func(name, phone):  # 1&2
